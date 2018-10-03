@@ -27,13 +27,17 @@
   "scripts": {
     "lint": "xo --fix",
     "test": "jest",
-    "coverage": "jest --coverage",
-    "precommit": "npm run lint && npm test"
+    "coverage": "jest --coverage"
   },
   "devDependencies": {
     "husky": "^1.1.0",
     "jest": "^23.6.0",
     "xo": "^0.23.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint && npm test"
+    }
   },
   "xo": {
     "semicolon": false,
