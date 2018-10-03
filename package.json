@@ -1,0 +1,53 @@
+{
+  "name": "@tkesgar/haru",
+  "version": "0.0.0",
+  "description": "Helper for serializing and deserializing password",
+  "keywords": [
+    "password",
+    "hash",
+    "pbkdf2"
+  ],
+  "license": "MIT",
+  "author": "Ted Kesgar <t.kesgar@live.com> (https://tkesgar.com)",
+  "contributors": [
+    "Ted Kesgar <t.kesgar@live.com> (https://tkesgar.com)"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tkesgar/haru.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tkesgar/haru/issues"
+  },
+  "homepage": "https://github.com/tkesgar/haru#readme",
+  "engines": {
+    "node": ">=8"
+  },
+  "main": "index.js",
+  "scripts": {
+    "lint": "xo --fix",
+    "test": "jest",
+    "coverage": "jest --coverage",
+    "precommit": "npm run lint && npm test"
+  },
+  "devDependencies": {
+    "husky": "^1.1.0",
+    "jest": "^23.6.0",
+    "xo": "^0.23.0"
+  },
+  "xo": {
+    "semicolon": false,
+    "space": 2,
+    "overrides": [
+      {
+        "files": [
+          "__tests__/**/*.js",
+          "**/*.test.js"
+        ],
+        "env": [
+          "jest"
+        ]
+      }
+    ]
+  }
+}
