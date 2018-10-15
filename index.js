@@ -1,48 +1,40 @@
-const Haru0 = require('./lib/haru0')
-const Haru1 = require('./lib/haru1')
+const createSalt = require('./lib/create-salt')
+const stdMethods = require('./lib/methods')
+
+const HaruDefault = new Haru()
 
 class Haru {
-  static fromObject(obj, upgrade = true, latest = false) {
-    const {
-      v: version,
-      h: hash,
-      s: salt
-    } = obj
+  static get stdMethods() {
+    return stdMethods
+  }
 
-    if (typeof version !== 'string') {
-      throw new TypeError(`Invalid type for 'v': '${typeof version}' (expected: 'string')`)
-    }
+  static get HaruDefault() {
+    return HaruDefault
+  }
 
-    if (typeof hash !== 'string') {
-      throw new TypeError(`Invalid type for 'h': '${typeof hash}' (expected: 'string')`)
-    }
-
-    if (typeof salt !== 'string') {
-      throw new TypeError(`Invalid type for 's': '${typeof salt}' (expected: 'string')`)
-    }
-
-    switch (version) {
-      case Haru0.version: {
-        if (latest) {
-          throw new Error(`Encountered old haru object (version: ${version})`)
-        }
-
-        const h = Haru0.fromObject(obj)
-        return upgrade ? Haru1.fromHaru0(h) : h
+  constructor(methods = Haru.stdMethods) {
+    return class {
+      static fromArray(arr) {
+        const [methodName, hash, salt, time] = arr
+        const {fn} = methods[methodName]
+        return new this(fn, hash, salt, time)
       }
-      case Haru1.version:
-        return Haru1.fromObject(obj)
-      default:
-        throw new Error(`Unknown version: '${version}'`)
+
+      static fromJSON(json) {
+        return this.fromArray(JSON.parse(json))
+      }
+
+      static async fromPassword(password, methodName, time, salt = createSalt()) {
+        const {fn} = methods[methodName]
+        const hash = await fn(password, salt, time)
+        return new this(fn, hash, salt, time)
+      }
+
+      constructor(fn, hash, salt, time) {
+        this.toString = () => JSON.stringify([method, hash, salt, time])
+        this.test = async password => hash === (await fn(password, salt, time))
+      }
     }
-  }
-
-  static fromString(str) {
-    return Haru.fromObject(JSON.parse(str))
-  }
-
-  static fromPassword(password, salt = null, opts = {}) {
-    return Haru1.fromPassword(password, salt, opts)
   }
 }
 
