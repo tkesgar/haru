@@ -1,41 +1,80 @@
-const createSalt = require('./lib/create-salt')
-const stdMethods = require('./lib/methods')
+const crypto = require('crypto')
+const util = require('util')
 
-const HaruDefault = new Haru()
+const ITER_BASE = 10000
+const KEYLEN = 64
+const SALT_SIZE = 16
+const VERSION = 'HARU10'
+const DIGEST = 'sha512'
+
+const pbkdf2 = util.promisify(crypto.pbkdf2)
 
 class Haru {
-  static get stdMethods() {
-    return stdMethods
-  }
+  static fromObject(obj) {
+    const {
+      v: version,
+      h: hashB64,
+      s: saltB64,
+      c: cost
+    } = obj
 
-  static get HaruDefault() {
-    return HaruDefault
-  }
-
-  constructor(methods = Haru.stdMethods) {
-    return class {
-      static fromArray(arr) {
-        const [methodName, hash, salt, time] = arr
-        const {fn} = methods[methodName]
-        return new this(fn, hash, salt, time)
-      }
-
-      static fromJSON(json) {
-        return this.fromArray(JSON.parse(json))
-      }
-
-      static async fromPassword(password, methodName, time, salt = createSalt()) {
-        const {fn} = methods[methodName]
-        const hash = await fn(password, salt, time)
-        return new this(fn, hash, salt, time)
-      }
-
-      constructor(fn, hash, salt, time) {
-        this.toString = () => JSON.stringify([method, hash, salt, time])
-        this.test = async password => hash === (await fn(password, salt, time))
-      }
+    if (version !== VERSION) {
+      throw new TypeError(`Expected version to be '${VERSION}', got '${version}'`)
     }
+
+    if (typeof cost !== 'number') {
+      throw new TypeError(`Expected typeof cost to be 'number', got '${typeof cost}'`)
+    }
+
+    const hash = Buffer.from(hashB64, 'base64')
+    const salt = Buffer.from(saltB64, 'base64')
+    return new Haru(version, hash, salt, cost)
+  }
+
+  static fromJSON(json) {
+    return Haru.fromObject(JSON.parse(json))
+  }
+
+  static async fromPassword(password, salt = createSalt(), cost = 1) {
+    const hash = await createHash(password, salt, cost)
+    return new Haru(hash, salt, cost)
+  }
+
+  constructor(hash, salt, cost) {
+    this.hash = hash
+    this.salt = salt
+    this.cost = cost
+  }
+
+  async test(password) {
+    const passwordHash = await createHash(password, this.salt, this.cost)
+    return this.hash.compare(passwordHash) === 0
+  }
+
+  toObject() {
+    return {
+      v: VERSION,
+      h: this.hash.toString('base64'),
+      s: this.salt.toString('base64'),
+      c: this.cost
+    }
+  }
+
+  toJSON() {
+    return JSON.stringify(this.toObject())
+  }
+
+  toString() {
+    return this.toJSON()
   }
 }
 
 module.exports = Haru
+
+function createSalt() {
+  return crypto.randomBytes(SALT_SIZE)
+}
+
+function createHash(password, salt, cost) {
+  return pbkdf2(password, salt, Math.floor(ITER_BASE * cost), KEYLEN, DIGEST)
+}
