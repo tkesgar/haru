@@ -21,13 +21,12 @@
   },
   "homepage": "https://github.com/tkesgar/haru#readme",
   "engines": {
-    "node": ">=8"
+    "node": ">=7.6"
   },
   "main": "index.js",
   "scripts": {
     "lint": "xo",
-    "test": "npm run lint && jest",
-    "coverage": "jest --coverage"
+    "test": "jest"
   },
   "devDependencies": {
     "husky": "^1.2.0",
@@ -36,7 +35,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm test"
+      "pre-commit": "npm run lint && npm test"
     }
   },
   "xo": {

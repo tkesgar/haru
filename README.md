@@ -79,10 +79,6 @@ console.log(await h.test('correct horse battery staple'))
 
 ### `Haru.toString(): string`
 
-## CLI
-
-### `haru <password> [salt] [cost]`
-
 ## Installation
 
 ```sh
@@ -97,12 +93,6 @@ Feel free to create [issues][issue] or submit [pull requests][pull].
 
   - [ ] Add CLI for haru
   - [ ] Make haru isomophic using Web Crypto API
-
-## haru?
-
-[Haru Okumura][chara] from [Persona 5][work].
-
-[![Haru Okumura by Asukaziye][chara-img]][chara-img-src]
 
 ## License
 
