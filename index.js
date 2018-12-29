@@ -28,7 +28,7 @@ class Haru {
 
     const hash = Buffer.from(hashB64, 'base64')
     const salt = Buffer.from(saltB64, 'base64')
-    return new Haru(version, hash, salt, cost)
+    return new Haru(hash, salt, cost)
   }
 
   static fromJSON(json) {

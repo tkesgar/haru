@@ -10,17 +10,6 @@ describe('static Haru.fromObject', () => {
     expect(typeof Haru.fromObject).toBe('function')
   })
 
-  it('should match the snapshot result', () => {
-    const obj = {
-      v: 'HARU10',
-      h: 'Fz3ZzqwZ3See6L5+ddmbjYYchNIQpu6lRGIvZZXGz4XCDXWDCWzS9hZvu3F1QfiPB7FAoVDNOH9a//Tc9bg4YA==',
-      s: '7GUk0MlUrjA=',
-      c: 1
-    }
-
-    expect(Haru.fromObject(obj)).toMatchSnapshot()
-  })
-
   it('should fail if version does not exist', () => {
     const obj = {
       h: 'Fz3ZzqwZ3See6L5+ddmbjYYchNIQpu6lRGIvZZXGz4XCDXWDCWzS9hZvu3F1QfiPB7FAoVDNOH9a//Tc9bg4YA==',
@@ -82,6 +71,20 @@ describe('static Haru.fromObject', () => {
 
     expect(() => Haru.fromObject(obj)).toThrow()
   })
+
+  it('should match the snapshot result', async () => {
+    const password = 'correct horse battery staple'
+    const obj = {
+      v: 'HARU10',
+      h: 'Fz3ZzqwZ3See6L5+ddmbjYYchNIQpu6lRGIvZZXGz4XCDXWDCWzS9hZvu3F1QfiPB7FAoVDNOH9a//Tc9bg4YA==',
+      s: '7GUk0MlUrjA=',
+      c: 1
+    }
+
+    const h = Haru.fromObject(obj)
+    expect(h).toMatchSnapshot()
+    expect(await h.test(password)).toBe(true)
+  })
 })
 
 describe('static Haru.fromJSON', () => {
@@ -89,7 +92,8 @@ describe('static Haru.fromJSON', () => {
     expect(typeof Haru.fromJSON).toBe('function')
   })
 
-  it('should match the snapshot result', () => {
+  it('should match the snapshot result', async () => {
+    const password = 'correct horse battery staple'
     const json = `{
       "v": "HARU10",
       "h": "Fz3ZzqwZ3See6L5+ddmbjYYchNIQpu6lRGIvZZXGz4XCDXWDCWzS9hZvu3F1QfiPB7FAoVDNOH9a//Tc9bg4YA==",
@@ -97,7 +101,9 @@ describe('static Haru.fromJSON', () => {
       "c": 1
     }`
 
-    expect(Haru.fromJSON(json)).toMatchSnapshot()
+    const h = Haru.fromJSON(json)
+    expect(h).toMatchSnapshot()
+    expect(await h.test(password)).toBe(true)
   })
 })
 

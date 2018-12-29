@@ -13,6 +13,6 @@ Object {
 
 exports[`Haru.toString should match the snapshot result 1`] = `"{\\"v\\":\\"HARU10\\",\\"h\\":\\"Fz3ZzqwZ3See6L5+ddmbjYYchNIQpu6lRGIvZZXGz4XCDXWDCWzS9hZvu3F1QfiPB7FAoVDNOH9a//Tc9bg4YA==\\",\\"s\\":\\"7GUk0MlUrjA=\\",\\"c\\":1}"`;
 
-exports[`static Haru.fromJSON should match the snapshot result 1`] = `"{\\"v\\":\\"HARU10\\",\\"h\\":\\"HARU10\\",\\"s\\":\\"Fz3ZzqwZ3See6L5+ddmbjYYchNIQpu6lRGIvZZXGz4XCDXWDCWzS9hZvu3F1QfiPB7FAoVDNOH9a//Tc9bg4YA==\\",\\"c\\":{\\"type\\":\\"Buffer\\",\\"data\\":[236,101,36,208,201,84,174,48]}}"`;
+exports[`static Haru.fromJSON should match the snapshot result 1`] = `"{\\"v\\":\\"HARU10\\",\\"h\\":\\"Fz3ZzqwZ3See6L5+ddmbjYYchNIQpu6lRGIvZZXGz4XCDXWDCWzS9hZvu3F1QfiPB7FAoVDNOH9a//Tc9bg4YA==\\",\\"s\\":\\"7GUk0MlUrjA=\\",\\"c\\":1}"`;
 
-exports[`static Haru.fromObject should match the snapshot result 1`] = `"{\\"v\\":\\"HARU10\\",\\"h\\":\\"HARU10\\",\\"s\\":\\"Fz3ZzqwZ3See6L5+ddmbjYYchNIQpu6lRGIvZZXGz4XCDXWDCWzS9hZvu3F1QfiPB7FAoVDNOH9a//Tc9bg4YA==\\",\\"c\\":{\\"type\\":\\"Buffer\\",\\"data\\":[236,101,36,208,201,84,174,48]}}"`;
+exports[`static Haru.fromObject should match the snapshot result 1`] = `"{\\"v\\":\\"HARU10\\",\\"h\\":\\"Fz3ZzqwZ3See6L5+ddmbjYYchNIQpu6lRGIvZZXGz4XCDXWDCWzS9hZvu3F1QfiPB7FAoVDNOH9a//Tc9bg4YA==\\",\\"s\\":\\"7GUk0MlUrjA=\\",\\"c\\":1}"`;
