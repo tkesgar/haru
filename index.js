@@ -1,5 +1,4 @@
 const crypto = require('crypto')
-const util = require('util')
 
 const ITER_BASE = 10000
 const KEYLEN = 64
@@ -7,7 +6,14 @@ const SALT_SIZE = 16
 const VERSION = 'HARU10'
 const DIGEST = 'sha512'
 
-const pbkdf2 = util.promisify(crypto.pbkdf2)
+/* eslint-disable-next-line max-params */
+function pbkdf2(password, salt, iterations, keylen, digest) {
+  return new Promise((resolve, reject) => {
+    crypto.pbkdf2(password, salt, iterations, keylen, digest, (err, key) => {
+      return err ? reject(err) : resolve(key)
+    })
+  })
+}
 
 class Haru {
   static fromObject(obj) {
