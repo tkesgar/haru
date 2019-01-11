@@ -6,6 +6,8 @@ const SALT_SIZE = 16
 const VERSION = 'HARU10'
 const DIGEST = 'sha512'
 
+const DEFAULT_COST = 2.0
+
 /* eslint-disable-next-line max-params */
 function pbkdf2(password, salt, iterations, keylen, digest) {
   return new Promise((resolve, reject) => {
@@ -16,6 +18,10 @@ function pbkdf2(password, salt, iterations, keylen, digest) {
 }
 
 class Haru {
+  static get DEFAULT_COST() {
+    return DEFAULT_COST
+  }
+
   static fromObject(obj) {
     const {
       v: version,
@@ -41,9 +47,21 @@ class Haru {
     return Haru.fromObject(JSON.parse(json))
   }
 
-  static async fromPassword(password, salt = createSalt(), cost = 1) {
+  static async fromPassword(password, salt = createSalt(), cost = Haru.DEFAULT_COST) {
     const hash = await createHash(password, salt, cost)
     return new Haru(hash, salt, cost)
+  }
+
+  static test(h, password) {
+    if (h instanceof Haru) {
+      return h.test(password)
+    }
+
+    if (typeof h === 'string') {
+      return Haru.fromJSON(h).test(password)
+    }
+
+    return Haru.fromObject(h).test(password)
   }
 
   constructor(hash, salt, cost) {

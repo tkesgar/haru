@@ -1,17 +1,17 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Haru.toJSON should match the snapshot result 1`] = `"{\\"v\\":\\"HARU10\\",\\"h\\":\\"Fz3ZzqwZ3See6L5+ddmbjYYchNIQpu6lRGIvZZXGz4XCDXWDCWzS9hZvu3F1QfiPB7FAoVDNOH9a//Tc9bg4YA==\\",\\"s\\":\\"7GUk0MlUrjA=\\",\\"c\\":1}"`;
+exports[`Haru.toJSON should match the snapshot result 1`] = `"{\\"v\\":\\"HARU10\\",\\"h\\":\\"tL3z0ooYDK68VwhboJE1DeWkY8FgPWYkFDfEat0xvQgDB0MilWSexv7w0di+CIpZsnrFiKu0uEHgUsaNioaloQ==\\",\\"s\\":\\"7GUk0MlUrjA=\\",\\"c\\":2}"`;
 
 exports[`Haru.toObject should match the snapshot result 1`] = `
 Object {
-  "c": 1,
-  "h": "Fz3ZzqwZ3See6L5+ddmbjYYchNIQpu6lRGIvZZXGz4XCDXWDCWzS9hZvu3F1QfiPB7FAoVDNOH9a//Tc9bg4YA==",
+  "c": 2,
+  "h": "tL3z0ooYDK68VwhboJE1DeWkY8FgPWYkFDfEat0xvQgDB0MilWSexv7w0di+CIpZsnrFiKu0uEHgUsaNioaloQ==",
   "s": "7GUk0MlUrjA=",
   "v": "HARU10",
 }
 `;
 
-exports[`Haru.toString should match the snapshot result 1`] = `"{\\"v\\":\\"HARU10\\",\\"h\\":\\"Fz3ZzqwZ3See6L5+ddmbjYYchNIQpu6lRGIvZZXGz4XCDXWDCWzS9hZvu3F1QfiPB7FAoVDNOH9a//Tc9bg4YA==\\",\\"s\\":\\"7GUk0MlUrjA=\\",\\"c\\":1}"`;
+exports[`Haru.toString should match the snapshot result 1`] = `"{\\"v\\":\\"HARU10\\",\\"h\\":\\"tL3z0ooYDK68VwhboJE1DeWkY8FgPWYkFDfEat0xvQgDB0MilWSexv7w0di+CIpZsnrFiKu0uEHgUsaNioaloQ==\\",\\"s\\":\\"7GUk0MlUrjA=\\",\\"c\\":2}"`;
 
 exports[`static Haru.fromJSON should match the snapshot result 1`] = `"{\\"v\\":\\"HARU10\\",\\"h\\":\\"Fz3ZzqwZ3See6L5+ddmbjYYchNIQpu6lRGIvZZXGz4XCDXWDCWzS9hZvu3F1QfiPB7FAoVDNOH9a//Tc9bg4YA==\\",\\"s\\":\\"7GUk0MlUrjA=\\",\\"c\\":1}"`;
 
