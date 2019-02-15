@@ -24,10 +24,6 @@
     "node": ">=7.6"
   },
   "main": "index.js",
-  "bin": {
-    "haru-pass": "./bin/haru-pass.js",
-    "haru-test": "./bin/haru-test.js"
-  },
   "scripts": {
     "lint": "xo",
     "test": "jest"
