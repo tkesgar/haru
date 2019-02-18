@@ -1,238 +1,143 @@
 /* eslint-env jest */
 const Haru = require('..')
 
-it('should export a function', () => {
-  expect(typeof Haru).toBe('function')
-})
+const TEST_PASS = 'correct horse battery staple'
+const TEST_SALT = Buffer.from('000000000000', 'base64')
+const TEST_COST = 1.2345
+const TEST_OBJ = {
+  v: 'HARU10',
+  h: 'cN9QYp+VDcW8pjIf+w05inv8kmwCarG7CFXRbbSJRh5+oE6Pv2al7Ma/7WKKsqW85LLZB1/9k93qna1WXGw2gA==',
+  s: '000000000000',
+  c: 1.2345
+}
+const TEST_STR = '{"v":"HARU10","h":"cN9QYp+VDcW8pjIf+w05inv8kmwCarG7CFXRbbSJRh5+oE6Pv2al7Ma/7WKKsqW85LLZB1/9k93qna1WXGw2gA==","s":"000000000000","c":1.2345}'
 
-describe('static Haru.fromObject', () => {
-  it('should be present in Haru', () => {
-    expect(typeof Haru.fromObject).toBe('function')
-  })
-
-  it('should fail if version does not exist', () => {
-    const obj = {
-      h: 'Fz3ZzqwZ3See6L5+ddmbjYYchNIQpu6lRGIvZZXGz4XCDXWDCWzS9hZvu3F1QfiPB7FAoVDNOH9a//Tc9bg4YA==',
-      s: '7GUk0MlUrjA=',
-      c: 1
-    }
-
-    expect(() => Haru.fromObject(obj)).toThrow()
-  })
-
-  it('should fail if hash does not exist', () => {
-    const obj = {
-      v: 'HARU10',
-      s: '7GUk0MlUrjA=',
-      c: 1
-    }
-
-    expect(() => Haru.fromObject(obj)).toThrow()
-  })
-
-  it('should fail if salt does not exist', () => {
-    const obj = {
-      v: 'HARU10',
-      h: 'Fz3ZzqwZ3See6L5+ddmbjYYchNIQpu6lRGIvZZXGz4XCDXWDCWzS9hZvu3F1QfiPB7FAoVDNOH9a//Tc9bg4YA==',
-      c: 1
-    }
-
-    expect(() => Haru.fromObject(obj)).toThrow()
-  })
-
-  it('should fail if cost does not exist', () => {
-    const obj = {
-      v: 'HARU10',
-      h: 'Fz3ZzqwZ3See6L5+ddmbjYYchNIQpu6lRGIvZZXGz4XCDXWDCWzS9hZvu3F1QfiPB7FAoVDNOH9a//Tc9bg4YA==',
-      s: '7GUk0MlUrjA='
-    }
-
-    expect(() => Haru.fromObject(obj)).toThrow()
-  })
-
-  it('should fail if version does not match', () => {
-    const obj = {
-      v: 'HARU1',
-      h: 'Fz3ZzqwZ3See6L5+ddmbjYYchNIQpu6lRGIvZZXGz4XCDXWDCWzS9hZvu3F1QfiPB7FAoVDNOH9a//Tc9bg4YA==',
-      s: '7GUk0MlUrjA=',
-      c: 1
-    }
-
-    expect(() => Haru.fromObject(obj)).toThrow()
-  })
-
-  it('should fail if cost is not a number', () => {
-    const obj = {
-      v: 'HARU1',
-      h: 'Fz3ZzqwZ3See6L5+ddmbjYYchNIQpu6lRGIvZZXGz4XCDXWDCWzS9hZvu3F1QfiPB7FAoVDNOH9a//Tc9bg4YA==',
-      s: '7GUk0MlUrjA=',
-      c: '1'
-    }
-
-    expect(() => Haru.fromObject(obj)).toThrow()
-  })
-
-  it('should match the snapshot result', async () => {
-    const password = 'correct horse battery staple'
-    const obj = {
-      v: 'HARU10',
-      h: 'Fz3ZzqwZ3See6L5+ddmbjYYchNIQpu6lRGIvZZXGz4XCDXWDCWzS9hZvu3F1QfiPB7FAoVDNOH9a//Tc9bg4YA==',
-      s: '7GUk0MlUrjA=',
-      c: 1
-    }
-
-    const h = Haru.fromObject(obj)
-    expect(h).toMatchSnapshot()
-    expect(await h.test(password)).toBe(true)
+describe('static Haru.DEFAULT_COST', () => {
+  it('should be used as default value for Haru.create()', async () => {
+    const h = await Haru.create(TEST_PASS)
+    expect(h.cost).toBe(Haru.DEFAULT_COST)
   })
 })
 
-describe('static Haru.fromJSON', () => {
-  it('should be present in Haru', () => {
-    expect(typeof Haru.fromJSON).toBe('function')
+describe('static Haru.create()', () => {
+  describe('with defaults', () => {
+    it('should return a new Haru instance', async () => {
+      const h = await Haru.create(TEST_PASS)
+      expect(h).toBeInstanceOf(Haru)
+    })
+
+    it('hash should match the provided password', async () => {
+      const h = await Haru.create(TEST_PASS)
+      expect(await h.test(TEST_PASS)).toBe(true)
+    })
   })
 
-  it('should match the snapshot result', async () => {
-    const password = 'correct horse battery staple'
-    const json = `{
-      "v": "HARU10",
-      "h": "Fz3ZzqwZ3See6L5+ddmbjYYchNIQpu6lRGIvZZXGz4XCDXWDCWzS9hZvu3F1QfiPB7FAoVDNOH9a//Tc9bg4YA==",
-      "s": "7GUk0MlUrjA=",
-      "c": 1
-    }`
+  describe('with custom salt', () => {
+    const salt = TEST_SALT
 
-    const h = Haru.fromJSON(json)
-    expect(h).toMatchSnapshot()
-    expect(await h.test(password)).toBe(true)
-  })
-})
+    it('should return a new Haru instance', async () => {
+      const h = await Haru.create(TEST_PASS, {salt})
+      expect(h).toBeInstanceOf(Haru)
+    })
 
-describe('static Haru.fromPassword', () => {
-  it('should be present in Haru', () => {
-    expect(typeof Haru.fromPassword).toBe('function')
-  })
+    it('salt should match the provided salt', async () => {
+      const h = await Haru.create(TEST_PASS, {salt})
+      expect(h.salt.compare(salt)).toBe(0)
+    })
 
-  it('should return a correct haru instance for a given password', async () => {
-    const password = 'correct horse battery staple'
-
-    const h = await Haru.fromPassword(password)
-    expect(await h.test(password)).toBe(true)
+    it('hash should match the provided password', async () => {
+      const h = await Haru.create(TEST_PASS, {salt})
+      expect(await h.test(TEST_PASS)).toBe(true)
+    })
   })
 
-  it('should return a correct haru instance for a given password and salt', async () => {
-    const password = 'correct horse battery staple'
-    const salt = testSalt()
+  describe('with custom const', () => {
+    const cost = TEST_COST
 
-    const h = await Haru.fromPassword(password, salt)
-    expect(await h.test(password)).toBe(true)
-    expect(h.salt.compare(salt)).toBe(0)
-  })
+    it('should return a new Haru instance', async () => {
+      const h = await Haru.create(TEST_PASS, {cost})
+      expect(h).toBeInstanceOf(Haru)
+    })
 
-  it('should return a correct haru instance for a given password, salt, and cost', async () => {
-    const password = 'correct horse battery staple'
-    const salt = testSalt()
-    const cost = 5
+    it('cost should match the provided cost', async () => {
+      const h = await Haru.create(TEST_PASS, {cost})
+      expect(h.cost).toBe(cost)
+    })
 
-    const h = await Haru.fromPassword(password, salt, cost)
-    expect(await h.test(password)).toBe(true)
-    expect(h.salt.compare(salt)).toBe(0)
-    expect(h.cost).toBe(cost)
-  })
-
-  it('should work with real number cost', async () => {
-    const password = 'correct horse battery staple'
-    const salt = testSalt()
-    const cost = 3.141592653589793
-
-    const h = await Haru.fromPassword(password, salt, cost)
-    expect(await h.test(password)).toBe(true)
-    expect(h.cost).toBe(cost)
-  })
-
-  it('should return different hash for different salt', async () => {
-    const password = 'correct horse battery staple'
-    const salt1 = Buffer.from('7GUk0MlUrjA=', 'base64')
-    const salt2 = Buffer.from('J++Jb6DTXKw=', 'base64')
-
-    const h1 = await Haru.fromPassword(password, salt1)
-    const h2 = await Haru.fromPassword(password, salt2)
-    expect(await h1.hash.compare(h2.hash)).not.toBe(0)
-  })
-
-  it('should return different hash for different cost', async () => {
-    const password = 'correct horse battery staple'
-    const salt = testSalt()
-    const cost1 = 1
-    const cost2 = 2
-
-    const h1 = await Haru.fromPassword(password, salt, cost1)
-    const h2 = await Haru.fromPassword(password, salt, cost2)
-    expect(await h1.hash.compare(h2.hash)).not.toBe(0)
+    it('hash should match the provided password', async () => {
+      const h = await Haru.create(TEST_PASS, {cost})
+      expect(await h.test(TEST_PASS)).toBe(true)
+    })
   })
 })
 
-describe('Haru.test', () => {
-  it('should be present in Haru instance', async () => {
-    const h = await testHaruInstance()
-    expect(typeof h.test).toBe('function')
+describe('static Haru.from()', () => {
+  describe('with object', () => {
+    it('should return the Haru instance', async () => {
+      const val = TEST_OBJ
+
+      const h = Haru.from(val)
+      expect(h).toStrictEqual(await createTestInstance())
+    })
   })
 
+  describe('with string', () => {
+    it('should return the Haru instance', async () => {
+      const val = TEST_STR
+
+      const h = Haru.from(val)
+      expect(h).toStrictEqual(await createTestInstance())
+    })
+  })
+})
+
+describe('static Haru.test()', () => {
+  describe('with Haru instance', async () => {
+    const val = await createTestInstance()
+
+    expect(await Haru.test(val, TEST_PASS)).toBe(true)
+  })
+
+  describe('with non-Haru instance', async () => {
+    const val = TEST_OBJ
+
+    expect(await Haru.test(val, TEST_PASS)).toBe(true)
+  })
+})
+
+describe('Haru.test()', () => {
   it('should match the correct password', async () => {
-    const h = await testHaruInstance()
-    expect(await h.test('correct horse battery staple')).toBe(true)
+    const h = await createTestInstance()
+    expect(await h.test(TEST_PASS)).toBe(true)
   })
 
   it('should not match the wrong password', async () => {
-    const h = await testHaruInstance()
+    const h = await createTestInstance()
     expect(await h.test('Tr0ub4dor&3')).toBe(false)
   })
 })
 
-describe('Haru.toObject', () => {
-  it('should be present in Haru instance', async () => {
-    const h = await testHaruInstance()
-    expect(typeof h.toObject).toBe('function')
-  })
-
-  it('should match the snapshot result', async () => {
-    const h = await testHaruInstance()
-    expect(h.toObject()).toMatchSnapshot()
+describe('Haru.toObject()', () => {
+  it('should match the test object', async () => {
+    const h = await createTestInstance()
+    expect(h.toObject()).toEqual(TEST_OBJ)
   })
 })
 
-describe('Haru.toJSON', () => {
-  it('should be present in Haru instance', async () => {
-    const h = await testHaruInstance()
-    expect(typeof h.toJSON).toBe('function')
-  })
-
-  it('should match the snapshot result', async () => {
-    const h = await testHaruInstance()
-    expect(h.toJSON()).toMatchSnapshot()
+describe('Haru.toString()', () => {
+  it('should match the test string', async () => {
+    const h = await createTestInstance()
+    expect(JSON.parse(h.toString())).toEqual(TEST_OBJ)
   })
 })
 
-describe('Haru.toString', () => {
-  it('should be present in Haru instance', async () => {
-    const h = await testHaruInstance()
-    expect(typeof h.toString).toBe('function')
-  })
-
-  it('should match the snapshot result', async () => {
-    const h = await testHaruInstance()
-    expect(h.toString()).toMatchSnapshot()
-  })
-
-  it('should return the same result with toJSON', async () => {
-    const h = await testHaruInstance()
-    expect(h.toString()).toBe(h.toJSON())
+describe('Haru.toJSON()', () => {
+  it('should return the same output as toString()', async () => {
+    const h = await createTestInstance()
+    expect(h.toJSON()).toEqual(h.toString())
   })
 })
 
-function testHaruInstance() {
-  return Haru.fromPassword('correct horse battery staple', testSalt())
-}
-
-function testSalt() {
-  return Buffer.from('7GUk0MlUrjA=', 'base64')
+function createTestInstance() {
+  return Haru.create(TEST_PASS, {salt: TEST_SALT, cost: TEST_COST})
 }
