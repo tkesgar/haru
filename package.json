@@ -1,7 +1,7 @@
 {
   "name": "@tkesgar/haru",
   "version": "1.1.0",
-  "description": "Helper for serializing and deserializing password",
+  "description": "Simple interface to password hashing",
   "keywords": [
     "password",
     "hash",
@@ -21,8 +21,11 @@
   },
   "homepage": "https://github.com/tkesgar/haru#readme",
   "engines": {
-    "node": ">=7.6"
+    "node": ">=8"
   },
+  "files": [
+    "index.js"
+  ],
   "main": "index.js",
   "scripts": {
     "lint": "xo",
@@ -30,8 +33,8 @@
   },
   "devDependencies": {
     "husky": "^1.2.0",
-    "jest": "^23.6.0",
-    "xo": "^0.23.0"
+    "jest": "^24.1.0",
+    "xo": "^0.24.0"
   },
   "husky": {
     "hooks": {
@@ -40,17 +43,6 @@
   },
   "xo": {
     "semicolon": false,
-    "space": 2,
-    "overrides": [
-      {
-        "files": [
-          "__tests__/**/*.js",
-          "**/*.test.js"
-        ],
-        "env": [
-          "jest"
-        ]
-      }
-    ]
+    "space": 2
   }
 }
