@@ -1,38 +1,39 @@
 # haru
 
+> Makes password hashing simpler
+
 [![XO code style](https://img.shields.io/badge/code_style-XO-5ed9c7.svg)](https://github.com/xojs/xo)
 [![Build Status](https://travis-ci.org/tkesgar/haru.svg?branch=master)](https://travis-ci.org/tkesgar/haru)
 [![codecov](https://codecov.io/gh/tkesgar/haru/branch/master/graph/badge.svg)](https://codecov.io/gh/tkesgar/haru)
 [![Greenkeeper badge](https://badges.greenkeeper.io/tkesgar/haru.svg)](https://greenkeeper.io/)
 
-haru is a library to make password hashing simpler.
+haru is an interface to make password hashing simpler.
 
-## Motivation
-
-  - Let's use JSON and Base64 encoding. It is based on a public standard, widely available on
-    various platforms, and relatively easy to use without gotchas.
-  - For a given hash, we only have to store the hash itself, a salt to make the hash unique, and a
-    *cost factor* to adjust the hash strength.
+> Also check [@tkesgar/futaba][futaba] for simpler hashing.
 
 ## Specification
 
-A haru JSON is a JSON string that, if parsed, results in an object with at least the following
-fields:
+A haru object is an object with the following fields:
 
-  - `v` (type: `string`): specifying the Haru **version** (current version: `HARU10`)
-  - `h` (type: `string`): the computed **hash** string, encoded in Base64
-  - `s` (type: `string`): the **salt** used for computing the hash, encoded in Base64
-  - `c` (type: `number`): a **cost** number associated with the hash
+  - `v` (type: `string`): the object **version**
+  - `h` (type: `string`): the Base64-encoded computed **hash**
+  - `s` (type: `string`): the Base64-encoded **salt** used for computing the hash
+  - `c` (type: `number`): the **cost** number associated with the hash
+
+The current version string of Haru is `"HARU10"`.
 
 The hash is computed from an arbitrary UTF-8 string using PBKDF2 with the following parameters:
 
-  - Salt: the content of `s`
-  - Number of iterations: 10000 * `c`
+  - Salt: the salt from haru object
+  - Number of iterations: c × 10000
   - Key length: 64
   - Digest algorithm: SHA512
 
-The following haru JSON is created from the famous password `correct horse battery staple`,
-Base64-encoded salt `7GUk0MlUrjA=`, and cost 1 (PBKDF2 iteration = 10000):
+### Example 1
+
+  - String: `correct horse battery staple`
+  - Salt: `7GUk0MlUrjA=` (Base64)
+  - Cost: 1 (PBKDF iterations = 10k)
 
 ```json
 {
@@ -43,8 +44,11 @@ Base64-encoded salt `7GUk0MlUrjA=`, and cost 1 (PBKDF2 iteration = 10000):
 }
 ```
 
-The following haru JSON is created from yet another famous password `margaretthatcheris110%SEXY`,
-Base64-encoded salt `J++Jb6DTXKw=`, and cost 6.5536 (PBKDF2 iteration = 65536):
+### Example 2
+
+  - String: `margaretthatcheris110%SEXY`
+  - Salt: `J++Jb6DTXKw=` (Base64)
+  - Cost: 6.5536 (PBKDF iterations = 65,536)
 
 ```json
 {
@@ -66,39 +70,41 @@ $ npm install @tkesgar/haru
 ```js
 const Haru = require('haru')
 
-const h = await Haru.fromPassword('correct horse battery staple')
+const h = await Haru.create('correct horse battery staple')
 
-console.log(await h.test('Tr0ub4dor&3'))
-// > false
-
-console.log(await h.test('correct horse battery staple'))
-// > true
+console.log(await h.test('Tr0ub4dor&3'))                   // false
+console.log(await h.test('correct horse battery staple'))  // true
 ```
 
 ## API
 
-### `static Haru.fromObject(obj): Haru`
+### `static Haru.DEFAULT_COST`
 
-Given an object `obj`, reads the value of `obj.v`, `obj.h`, `obj.s`, and `obj.c` and creates
-a new `Haru` instance using the provided value.
+A value that will be used as default cost. This value might be updated over time to ensure that new
+hashes are reasonably strong.
 
-  - `obj.v` is expected to be the string `'HARU10'`.
-  - `obj.h` and `obj.s` is assumed to be a valid Base64 string containing the hash and the salt.
-  - `obj.c` is assumed to be a valid cost number.
+### `static async Haru.create(password[, opts]): Haru`
 
-### `static Haru.fromJSON(json): Haru`
+Creates a new Haru instance using the provided `password`.
 
-Parses the string `json` as JSON and sends the result to `Haru.fromObject(obj)`.
+Options:
+  - `salt`: a `Buffer` containing the value that will be used as salt. If it is not provided,
+    a cryptographically random 16-bytes salt will be generated.
+  - `cost`: the cost value. If `cost` is not provided, `Haru.DEFAULT_COST` will be used.
 
-### `static async Haru.fromPassword(password[, salt, cost]): Haru`
+### `static Haru.from(val): Haru`
 
-Given a password string `password`, an optional salt `salt`, and an optional cost number `cost`,
-creates a new `Haru` instance using the provided value.
+If `val` is an object, read `val.h`, `val.s`, and `val.c` and create a new Haru instance using the
+provided value.
 
-  - `password` is assumed to be an UTF-8 string.
-  - `salt` is assumed to be a `Buffer` instance containing the salt value. If `salt` is not
-    provided, a cryptographically random 16-byte salt will be generated.
-  - `cost` is assumed to be a valid cost number.
+### `static Haru.test(val, password): Promise<boolean> | boolean`
+
+Convenience function for `Haru.from(val).test(password)`. If `val` is a Haru instance, return
+`val.test(password)`.
+
+### new Haru(hash, salt, cost)
+
+The constructor function. `hash` and `salt` is expected to be an instance of `Buffer`.
 
 ### `async Haru.test(password): boolean`
 
@@ -108,24 +114,15 @@ Resolves with `true` if the password matches, `false` otherwise.
 
 ### `Haru.toObject(): object`
 
-Returns an object with the fields `v`, `h`, `s`, `c` such that with a given `Haru` instance `H`,
-`Haru.fromObject(H.toObject())` returns the same hash.
+Returns the haru object representation of the instance.
 
 ### `Haru.toString(): string`
 
-Converts `Haru.toObject()` into JSON string.
+Returns the JSON string of the instance.
 
-## CLI
+### `Haru.toJSON(): string`
 
-### `haru-pass <password> [salt] [cost]`
-
-Runs `Haru.fromPassword(password, salt, cost)` and prints the resulting hash object to standard
-output as JSON string.
-
-### `haru-test <password>`
-
-Reads the `Haru` instance JSON from standard input and tests whether the given `password` matches.
-Prints `true` if the password matches, `false` otherwise.
+Alias for `Haru.toString()`. This allows Haru instances to be converted into JSON via [JSON.stringify()][tojson].
 
 ## Contribute
 
@@ -142,3 +139,5 @@ Licensed under [MIT License][license].
 [issue]: https://github.com/tkesgar/haru/issues
 [pull]: https://github.com/tkesgar/haru/pulls
 [license]: https://github.com/tkesgar/haru/blob/master/LICENSE
+[futaba]: https://www.npmjs.com/package/@tkesgar/futaba
+[tojson]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify#toJSON()_behavior
