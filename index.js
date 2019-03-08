@@ -78,7 +78,7 @@ class Haru {
 module.exports = Haru
 
 function createSalt() {
-  return crypto.randomBytes(SALTLEN).toString(ENCODING)
+  return crypto.randomBytes(SALTLEN)
 }
 
 function createHash(password, salt, cost) {
