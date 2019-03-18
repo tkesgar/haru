@@ -1,6 +1,6 @@
 {
   "name": "@tkesgar/haru",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Simple interface to password hashing",
   "keywords": [
     "password",
