@@ -54,7 +54,8 @@ class Haru {
   }
 
   async test(password) {
-    return this.hash.compare(await createHash(password, this.salt, this.cost)) === 0
+    const passwordHash = await createHash(password, this.salt, this.cost)
+    return crypto.timingSafeEqual(this.hash, passwordHash)
   }
 
   toObject() {
