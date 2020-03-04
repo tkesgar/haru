@@ -1,10 +1,8 @@
 language: node_js
 node_js:
- - "node"
- - "8"
-install:
-  - npm install -g codecov
-  - npm install
+  - "node"
+  - "10.5.0"
+  - "12"
 script:
   - npm test -- --coverage
-  - codecov
+  - npx codecov
