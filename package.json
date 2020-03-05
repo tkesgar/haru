@@ -1,11 +1,12 @@
 {
   "name": "@tkesgar/haru",
-  "version": "2.0.2",
+  "version": "3.0.0-beta.1",
   "description": "Simple interface to password hashing",
   "keywords": [
     "password",
     "hash",
-    "pbkdf2"
+    "pbkdf2",
+    "scrypt"
   ],
   "license": "MIT",
   "author": "Ted Kesgar <t.kesgar@live.com> (https://tkesgar.com)",
@@ -21,28 +22,35 @@
   },
   "homepage": "https://github.com/tkesgar/haru#readme",
   "engines": {
-    "node": ">=8"
+    "node": ">=10.5.0"
   },
   "files": [
-    "index.js"
+    "dist/**"
   ],
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "lint": "xo",
-    "test": "jest"
+    "watch": "tsc -w",
+    "lint": "eslint . --ext .js,.ts",
+    "format": "prettier --write '**/*'",
+    "test": "jest",
+    "clean": "rm -rf dist/**",
+    "build": "tsc"
   },
   "devDependencies": {
-    "husky": "^2.0.0",
-    "jest": "^24.1.0",
-    "xo": "^0.24.0"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run lint && npm test"
-    }
-  },
-  "xo": {
-    "semicolon": false,
-    "space": 2
+    "@types/jest": "^25.1.2",
+    "@types/node": "^13.7.1",
+    "@typescript-eslint/eslint-plugin": "^2.19.2",
+    "@typescript-eslint/parser": "^2.19.2",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.10.0",
+    "eslint-plugin-jest": "^23.7.0",
+    "eslint-plugin-prettier": "^3.1.2",
+    "husky": "^4.2.3",
+    "jest": "^25.1.0",
+    "lint-staged": "^10.0.7",
+    "prettier": "^1.19.1",
+    "ts-jest": "^25.2.0",
+    "typescript": "^3.7.5"
   }
 }
