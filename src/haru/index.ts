@@ -29,7 +29,7 @@ export default abstract class Haru {
     this.salt = salt;
   }
 
-  protected abstract async computeHash(password: string): Promise<Buffer>;
+  abstract async computeHash(password: string): Promise<Buffer>;
 
   abstract toJSON(): object;
 
@@ -37,9 +37,5 @@ export default abstract class Haru {
     const passwordHash = await this.computeHash(password);
 
     return timingSafeEqual(this.hash, passwordHash);
-  }
-
-  toString(): string {
-    return JSON.stringify(this);
   }
 }

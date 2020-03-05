@@ -6,8 +6,8 @@ import {
   DEFAULT_SCRYPT_BLOCK_SIZE,
   DEFAULT_SCRYPT_PARALLELIZATION,
   DEFAULT_SCRYPT_MAX_MEMORY
-} from "./crypt";
-import Haru, { HaruConstructorOpts, HaruMethod, HaruObject } from "./haru";
+} from "../lib/crypt";
+import Haru, { HaruConstructorOpts, HaruMethod, HaruObject } from ".";
 
 export type HaruScryptParams = [number, number, number, number];
 
