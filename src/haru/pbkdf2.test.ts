@@ -1,5 +1,5 @@
-import HaruPbkdf2, { HaruPbkdf2Params } from "./pbkdf2";
-import { HaruMethod, HaruObject } from ".";
+import HaruPbkdf2 from "./pbkdf2";
+import { HaruMethod, HaruObject, HaruPbkdf2Params } from ".";
 import {
   testHashPbkdf2V1,
   testHashPbkdf2V2,

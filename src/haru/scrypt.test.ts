@@ -1,5 +1,5 @@
-import HaruScrypt, { HaruScryptParams } from "./scrypt";
-import { HaruMethod, HaruObject } from ".";
+import HaruScrypt from "./scrypt";
+import { HaruMethod, HaruObject, HaruScryptParams } from ".";
 import {
   testHashScryptV1,
   testHashScryptV2,
