@@ -7,9 +7,12 @@ import {
   DEFAULT_SCRYPT_PARALLELIZATION,
   DEFAULT_SCRYPT_MAX_MEMORY
 } from "../lib/crypt";
-import Haru, { HaruConstructorOpts, HaruMethod, HaruObject } from ".";
-
-export type HaruScryptParams = [number, number, number, number];
+import Haru, {
+  HaruConstructorOpts,
+  HaruMethod,
+  HaruObject,
+  HaruScryptParams
+} from ".";
 
 interface HaruScryptConstructorOpts extends HaruConstructorOpts {
   cost: number;
@@ -90,7 +93,7 @@ export default class HaruScrypt extends Haru {
     });
   }
 
-  toJSON(): object {
+  toJSON(): HaruObject<HaruScryptParams> {
     return {
       v: "HARU20",
       h: this.hash.toString("base64"),

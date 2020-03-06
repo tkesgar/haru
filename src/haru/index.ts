@@ -5,7 +5,11 @@ export enum HaruMethod {
   Scrypt = 2
 }
 
-export interface HaruObject<P = unknown> {
+export type HaruPbkdf2Params = [number];
+
+export type HaruScryptParams = [number, number, number, number];
+
+export interface HaruObject<P = HaruPbkdf2Params | HaruScryptParams> {
   v: "HARU20";
   h: string;
   s: string;
@@ -31,7 +35,7 @@ export default abstract class Haru {
 
   abstract async computeHash(password: string): Promise<Buffer>;
 
-  abstract toJSON(): object;
+  abstract toJSON(): HaruObject;
 
   async test(password: string): Promise<boolean> {
     const passwordHash = await this.computeHash(password);
