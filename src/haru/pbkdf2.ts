@@ -1,7 +1,10 @@
 import { pbkdf2, createSalt, DEFAULT_PBKDF2_ITERATIONS } from "../lib/crypt";
-import Haru, { HaruConstructorOpts, HaruMethod, HaruObject } from ".";
-
-export type HaruPbkdf2Params = [number];
+import Haru, {
+  HaruConstructorOpts,
+  HaruMethod,
+  HaruObject,
+  HaruPbkdf2Params
+} from ".";
 
 interface HaruPbkdf2ConstructorOpts extends HaruConstructorOpts {
   iterations: number;
@@ -42,7 +45,7 @@ export default class HaruPbkdf2 extends Haru {
     return pbkdf2(password, this.salt, this.iterations);
   }
 
-  toJSON(): HaruObject {
+  toJSON(): HaruObject<HaruPbkdf2Params> {
     return {
       v: "HARU20",
       h: this.hash.toString("base64"),

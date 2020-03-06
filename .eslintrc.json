@@ -23,18 +23,9 @@
       "files": ["src/tests", "**/*.test.ts"],
       "env": {
         "jest": true
-      }
-    },
-    {
-      "files": "**/*.test.ts",
+      },
       "rules": {
         "@typescript-eslint/no-explicit-any": "off"
-      }
-    },
-    {
-      "files": "src/seeds/**/*.ts",
-      "rules": {
-        "@typescript-eslint/camelcase": "off"
       }
     }
   ]
