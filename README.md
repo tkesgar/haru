@@ -81,7 +81,29 @@ The same hash in `HARU20` format:
 
 ### Examples
 
-TBD
+#### PBKDF2
+
+```json
+{
+  "v": "HARU20",
+  "h": "b2TD+AI4E9jCyrQ8q/qmXtBhgir+l0Bg2AedEi+4afQg7iW8mZ81LkgqsZWD6aaufKt6m6PlOzam8NGjZaCqQA==",
+  "s": "c2FsdA==",
+  "m": 1,
+  "p": [65536]
+}
+```
+
+#### Scrypt
+
+```json
+{
+  "v": "HARU20",
+  "h": "dFcxr0SE8yOWiWntoomu7gBbWQOsVh5kpayhIXl793NO+f1YQi4uIhg7ysup7Ie6DIO3oueI8Dzg2gZGNDPNpg==",
+  "s": "c2FsdA==",
+  "m": 2,
+  "p": [16384, 8, 1, 33554432]
+}
+```
 
 ## Installation
 
@@ -93,13 +115,54 @@ $ npm install @tkesgar/haru
 
 ## Usage
 
-```ts
-import Haru from "haru";
+### Create a new password hash
 
-const h = await Haru.fromPassword("correct horse battery staple");
+```js
+import { fromPassword } from "@tkesgar/haru";
 
-console.log(await h.test("Tr0ub4dor&3")); // false
-console.log(await h.test("correct horse battery staple")); // true
+const haru = await fromPassword("correct horse battery staple");
+
+console.log(await haru.test("Tr0ub4dor&3")); // false
+console.log(await haru.test("correct horse battery staple")); // true
+```
+
+### Save password hash to storage
+
+```js
+import { fromPassword } from "@tkesgar/haru";
+
+// Create a new Haru instance
+const haru = await fromPassword("correct horse battery staple");
+
+// Serialize password hash to string
+const passwordHash = JSON.stringify(haru);
+
+// Save password hash
+const user = await User.findByName("admin");
+await user.set("password_hash", passwordHash);
+```
+
+### Load password hash from storage
+
+```js
+import { fromJSON, test } from "@tkesgar/haru";
+
+// Load password hash
+const user = await User.findByName("admin");
+const passwordHash = user.get("password_Hash"); // `{"v":"HARU20",...}`
+
+// Read JSON to create Haru instance
+const haru = fromJSON(passwordHash);
+
+// Check password
+if (await haru.test("correct horse battery staple")) {
+  console.log("Hello admin!");
+}
+
+// One-liner using test
+if (await test(passwordHash, "correct horse battery staple")) {
+  console.log("Hello admin!");
+}
 ```
 
 ## Contribute
