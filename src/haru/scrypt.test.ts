@@ -3,7 +3,7 @@ import { HaruMethod, HaruObject, HaruScryptParams } from ".";
 import {
   testHashScryptV1,
   testHashScryptV2,
-  testSalt
+  testSalt,
 } from "../lib/test-fixtures";
 
 const testHaruObject: HaruObject<HaruScryptParams> = {
@@ -11,7 +11,7 @@ const testHaruObject: HaruObject<HaruScryptParams> = {
   h: testHashScryptV1.toString("base64"),
   s: testSalt.toString("base64"),
   m: HaruMethod.Scrypt,
-  p: [16384, 8, 1, 33554432]
+  p: [16384, 8, 1, 33554432],
 };
 
 describe("fromObject", () => {
@@ -44,7 +44,7 @@ describe("fromPassword", () => {
       cost: 8192,
       blockSize: 4,
       parallelization: 2,
-      maxMemory: 128 * 8192 * 4 * 2
+      maxMemory: 128 * 8192 * 4 * 2,
     });
 
     const passwordHash = await haru.computeHash("password");

@@ -2,7 +2,7 @@ import { fromObject, HaruMethod } from "..";
 import {
   testSalt,
   testHashPbkdf2V1,
-  testHashScryptV1
+  testHashScryptV1,
 } from "../lib/test-fixtures";
 
 describe("fromObject", () => {
@@ -12,7 +12,7 @@ describe("fromObject", () => {
       h: testHashPbkdf2V1.toString("base64"),
       s: testSalt.toString("base64"),
       m: HaruMethod.Pbkdf2,
-      p: [65536]
+      p: [65536],
     });
 
     expect(await haru.test("password")).toBe(true);
@@ -24,7 +24,7 @@ describe("fromObject", () => {
       h: testHashScryptV1.toString("base64"),
       s: testSalt.toString("base64"),
       m: HaruMethod.Scrypt,
-      p: [16384, 8, 1, 33554432]
+      p: [16384, 8, 1, 33554432],
     });
 
     expect(await haru.test("password")).toBe(true);
@@ -37,7 +37,7 @@ describe("fromObject", () => {
         h: testHashScryptV1.toString("base64"),
         s: testSalt.toString("base64"),
         m: 3,
-        p: [16384, 8, 1, 33554432]
+        p: [16384, 8, 1, 33554432],
       });
     }).toThrowError("Unknown m: 3");
   });

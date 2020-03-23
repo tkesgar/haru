@@ -8,7 +8,7 @@ describe("test", () => {
       h: testHashScryptV1,
       s: testSalt,
       m: HaruMethod.Scrypt,
-      p: [16384, 8, 1, 33554432]
+      p: [16384, 8, 1, 33554432],
     });
 
     expect(await test(value, "password")).toBe(true);
@@ -20,7 +20,7 @@ describe("test", () => {
       h: testHashScryptV1,
       s: testSalt,
       m: HaruMethod.Scrypt,
-      p: [16384, 8, 1, 33554432]
+      p: [16384, 8, 1, 33554432],
     };
 
     expect(await test(value, "password")).toBe(true);
@@ -32,7 +32,7 @@ describe("test", () => {
       h: testHashScryptV1,
       s: testSalt,
       m: HaruMethod.Scrypt,
-      p: [16384, 8, 1, 33554432]
+      p: [16384, 8, 1, 33554432],
     };
 
     expect(await test(value, "drowssap")).toBe(false);

@@ -2,7 +2,7 @@ import { fromPassword, HaruMethod, HaruObject } from "..";
 import {
   testSalt,
   testHashPbkdf2V1,
-  testHashScryptV1
+  testHashScryptV1,
 } from "../lib/test-fixtures";
 
 describe("fromPassword", () => {

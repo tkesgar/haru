@@ -3,7 +3,7 @@ import Haru, {
   HaruConstructorOpts,
   HaruMethod,
   HaruObject,
-  HaruPbkdf2Params
+  HaruPbkdf2Params,
 } from ".";
 
 interface HaruPbkdf2ConstructorOpts extends HaruConstructorOpts {
@@ -51,7 +51,7 @@ export default class HaruPbkdf2 extends Haru {
       h: this.hash.toString("base64"),
       s: this.salt.toString("base64"),
       m: HaruMethod.Pbkdf2,
-      p: [this.iterations]
+      p: [this.iterations],
     };
   }
 }

@@ -4,7 +4,7 @@ import {
   testHashScryptV1,
   testHashScryptV2,
   testHashPbkdf2V1,
-  testHashPbkdf2V2
+  testHashPbkdf2V2,
 } from "../lib/test-fixtures";
 
 describe("createSalt", () => {
@@ -39,7 +39,7 @@ describe("scrypt", () => {
       cost: 8192,
       blockSize: 4,
       parallelization: 2,
-      maxMemory: 128 * 8192 * 4 * 2
+      maxMemory: 128 * 8192 * 4 * 2,
     });
 
     expect(passwordHash.toString("base64")).toEqual(hash.toString("base64"));

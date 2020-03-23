@@ -5,13 +5,13 @@ import {
   DEFAULT_SCRYPT_COST,
   DEFAULT_SCRYPT_BLOCK_SIZE,
   DEFAULT_SCRYPT_PARALLELIZATION,
-  DEFAULT_SCRYPT_MAX_MEMORY
+  DEFAULT_SCRYPT_MAX_MEMORY,
 } from "../lib/crypt";
 import Haru, {
   HaruConstructorOpts,
   HaruMethod,
   HaruObject,
-  HaruScryptParams
+  HaruScryptParams,
 } from ".";
 
 interface HaruScryptConstructorOpts extends HaruConstructorOpts {
@@ -35,7 +35,7 @@ export default class HaruScrypt extends Haru {
       cost,
       blockSize,
       parallelization,
-      maxMemory
+      maxMemory,
     });
   }
 
@@ -48,14 +48,14 @@ export default class HaruScrypt extends Haru {
       cost = DEFAULT_SCRYPT_COST,
       blockSize = DEFAULT_SCRYPT_BLOCK_SIZE,
       parallelization = DEFAULT_SCRYPT_PARALLELIZATION,
-      maxMemory = DEFAULT_SCRYPT_MAX_MEMORY
+      maxMemory = DEFAULT_SCRYPT_MAX_MEMORY,
     } = opts;
 
     const hash = await scrypt(password, salt, {
       cost,
       blockSize,
       parallelization,
-      maxMemory
+      maxMemory,
     });
 
     return new HaruScrypt({
@@ -64,7 +64,7 @@ export default class HaruScrypt extends Haru {
       cost,
       blockSize,
       parallelization,
-      maxMemory
+      maxMemory,
     });
   }
 
@@ -89,7 +89,7 @@ export default class HaruScrypt extends Haru {
       cost: this.cost,
       blockSize: this.blockSize,
       parallelization: this.parallelization,
-      maxMemory: this.maxMemory
+      maxMemory: this.maxMemory,
     });
   }
 
@@ -99,7 +99,7 @@ export default class HaruScrypt extends Haru {
       h: this.hash.toString("base64"),
       s: this.salt.toString("base64"),
       m: HaruMethod.Scrypt,
-      p: [this.cost, this.blockSize, this.parallelization, this.maxMemory]
+      p: [this.cost, this.blockSize, this.parallelization, this.maxMemory],
     };
   }
 }

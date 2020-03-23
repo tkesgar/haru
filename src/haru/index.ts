@@ -2,7 +2,7 @@ import { timingSafeEqual } from "crypto";
 
 export enum HaruMethod {
   Pbkdf2 = 1,
-  Scrypt = 2
+  Scrypt = 2,
 }
 
 export type HaruPbkdf2Params = [number];

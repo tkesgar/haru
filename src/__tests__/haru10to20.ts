@@ -7,7 +7,7 @@ describe("haru10to20", () => {
       v: "HARU10",
       h: testHashPbkdf2V2,
       s: testSalt,
-      c: 1
+      c: 1,
     };
 
     const haru20obj = haru10to20(haru10obj);

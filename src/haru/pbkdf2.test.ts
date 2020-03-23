@@ -3,7 +3,7 @@ import { HaruMethod, HaruObject, HaruPbkdf2Params } from ".";
 import {
   testHashPbkdf2V1,
   testHashPbkdf2V2,
-  testSalt
+  testSalt,
 } from "../lib/test-fixtures";
 
 const testHaruObject: HaruObject<HaruPbkdf2Params> = {
@@ -11,7 +11,7 @@ const testHaruObject: HaruObject<HaruPbkdf2Params> = {
   h: testHashPbkdf2V1.toString("base64"),
   s: testSalt.toString("base64"),
   m: HaruMethod.Pbkdf2,
-  p: [65536]
+  p: [65536],
 };
 
 describe("fromObject", () => {

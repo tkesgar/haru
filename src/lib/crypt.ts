@@ -50,7 +50,7 @@ export async function scrypt(
     cost = DEFAULT_SCRYPT_COST,
     blockSize = DEFAULT_SCRYPT_BLOCK_SIZE,
     parallelization = DEFAULT_SCRYPT_PARALLELIZATION,
-    maxMemory = DEFAULT_SCRYPT_MAX_MEMORY
+    maxMemory = DEFAULT_SCRYPT_MAX_MEMORY,
   } = opts;
 
   return new Promise((resolve, reject) => {
@@ -62,7 +62,7 @@ export async function scrypt(
         N: cost,
         r: blockSize,
         p: parallelization,
-        maxmem: maxMemory
+        maxmem: maxMemory,
       },
       (err, derivedKey) => {
         if (err) {

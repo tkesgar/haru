@@ -8,7 +8,7 @@ describe("fromJSON", () => {
       h: testHashPbkdf2V1.toString("base64"),
       s: testSalt.toString("base64"),
       m: HaruMethod.Pbkdf2,
-      p: [65536]
+      p: [65536],
     });
 
     const haru = fromJSON(json);

@@ -2,7 +2,7 @@ import Haru, {
   HaruObject,
   HaruMethod,
   HaruPbkdf2Params,
-  HaruScryptParams
+  HaruScryptParams,
 } from "./haru";
 import HaruPbkdf2 from "./haru/pbkdf2";
 import HaruScrypt from "./haru/scrypt";
@@ -67,7 +67,7 @@ export function haru10to20(haru10Object: object): HaruObject<HaruPbkdf2Params> {
     h,
     s,
     m: HaruMethod.Pbkdf2,
-    p: [iterations]
+    p: [iterations],
   };
 }
 
@@ -77,5 +77,5 @@ export {
   HaruPbkdf2Params,
   HaruScryptParams,
   HaruMethod,
-  HaruConstructorOpts
+  HaruConstructorOpts,
 } from "./haru";
