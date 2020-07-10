@@ -40,4 +40,10 @@ describe("fromPassword", () => {
     const { m } = haru.toJSON() as HaruObject;
     expect(m).toBe(HaruMethod.Scrypt);
   });
+
+  it("should throw error if method is unknown", async () => {
+    await expect(
+      fromPassword("password", ("foo" as unknown) as HaruMethod)
+    ).rejects.toThrowError("Unknown method: foo");
+  });
 });
