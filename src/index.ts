@@ -7,15 +7,8 @@ import Haru, {
 import HaruPbkdf2 from "./haru/pbkdf2";
 import HaruScrypt from "./haru/scrypt";
 
-interface Haru10Object {
-  v: "HARU10";
-  h: string;
-  s: string;
-  c: number;
-}
-
-export function fromObject(obj: object): Haru {
-  const { m } = obj as HaruObject;
+export function fromObject(obj: unknown): Haru {
+  const { m } = obj as { m: HaruMethod };
 
   switch (m) {
     case HaruMethod.Pbkdf2:
@@ -46,19 +39,21 @@ export async function fromPassword(
   }
 }
 
-export async function test(value: string, password: string): Promise<boolean>;
-export async function test(value: object, password: string): Promise<boolean>;
-export async function test(value: unknown, password: string): Promise<boolean> {
-  const haru =
-    typeof value === "string"
-      ? fromJSON(value)
-      : fromObject(value as HaruObject);
+export async function test(
+  value: string | unknown,
+  password: string
+): Promise<boolean> {
+  const haru = typeof value === "string" ? fromJSON(value) : fromObject(value);
 
   return haru.test(password);
 }
 
-export function haru10to20(haru10Object: object): HaruObject<HaruPbkdf2Params> {
-  const { h, s, c } = haru10Object as Haru10Object;
+export function haru10to20(haru10Object: {
+  h: string;
+  s: string;
+  c: number;
+}): HaruObject<HaruPbkdf2Params> {
+  const { h, s, c } = haru10Object;
 
   const iterations = Math.floor(c * 10000);
 
