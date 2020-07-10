@@ -22,7 +22,7 @@
   },
   "homepage": "https://github.com/tkesgar/haru#readme",
   "engines": {
-    "node": ">=10.5.0"
+    "node": ">=12"
   },
   "files": [
     "dist/**"
