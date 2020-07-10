@@ -17,8 +17,8 @@ describe("test", () => {
   it("should return true with value = Haru object", async () => {
     const value = {
       v: "HARU20",
-      h: testHashScryptV1,
-      s: testSalt,
+      h: testHashScryptV1.toString("base64"),
+      s: testSalt.toString("base64"),
       m: HaruMethod.Scrypt,
       p: [16384, 8, 1, 33554432],
     };
@@ -29,8 +29,8 @@ describe("test", () => {
   it("should return false because password does not match", async () => {
     const value = {
       v: "HARU20",
-      h: testHashScryptV1,
-      s: testSalt,
+      h: testHashScryptV1.toString("base64"),
+      s: testSalt.toString("base64"),
       m: HaruMethod.Scrypt,
       p: [16384, 8, 1, 33554432],
     };

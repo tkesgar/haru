@@ -5,8 +5,8 @@ describe("haru10to20", () => {
   it("should convert HARU10 to HARU20 object", async () => {
     const haru10obj = {
       v: "HARU10",
-      h: testHashPbkdf2V2,
-      s: testSalt,
+      h: testHashPbkdf2V2.toString("base64"),
+      s: testSalt.toString("base64"),
       c: 1,
     };
 
