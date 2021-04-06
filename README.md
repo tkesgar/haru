@@ -4,7 +4,6 @@
 [![Code style: ESLint](https://img.shields.io/badge/code%20style-ESLint-blueviolet)](https://eslint.org/)
 [![Prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 [![Jest](https://jestjs.io/img/jest-badge.svg)](https://github.com/facebook/jest)
-[![Build Status](https://travis-ci.org/tkesgar/haru.svg?branch=master)](https://travis-ci.org/tkesgar/haru)
 [![codecov](https://codecov.io/gh/tkesgar/haru/branch/master/graph/badge.svg)](https://codecov.io/gh/tkesgar/haru)
 
 > Please confide in me if you ever need help. I'll be there for you.
@@ -129,7 +128,7 @@ import { fromPassword } from "@tkesgar/haru";
 
 const haru = await fromPassword("correct horse battery staple");
 
-console.log(await haru.test("Tr0ub4dor&3")); // false
+console.log(await haru.test("Tr0ub4dor&3"));
 console.log(await haru.test("correct horse battery staple")); // true
 ```
 
@@ -138,13 +137,10 @@ console.log(await haru.test("correct horse battery staple")); // true
 ```js
 import { fromPassword } from "@tkesgar/haru";
 
-// Create a new Haru instance
 const haru = await fromPassword("correct horse battery staple");
 
-// Serialize password hash to string
 const passwordHash = JSON.stringify(haru);
 
-// Save password hash
 const user = await User.findByName("admin");
 await user.set("password_hash", passwordHash);
 ```
@@ -154,19 +150,15 @@ await user.set("password_hash", passwordHash);
 ```js
 import { fromJSON, test } from "@tkesgar/haru";
 
-// Load password hash
 const user = await User.findByName("admin");
-const passwordHash = user.get("password_Hash"); // `{"v":"HARU20",...}`
+const passwordHash = user.get("password_Hash");
 
-// Read JSON to create Haru instance
 const haru = fromJSON(passwordHash);
 
-// Check password
 if (await haru.test("correct horse battery staple")) {
   console.log("Hello admin!");
 }
 
-// One-liner using test
 if (await test(passwordHash, "correct horse battery staple")) {
   console.log("Hello admin!");
 }
